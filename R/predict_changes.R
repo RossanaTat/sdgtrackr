@@ -57,9 +57,11 @@ predict_speed <- function(data_model,
   #   change = round(as.numeric(changes_speed) / granularity) * granularity
   # )
 
-  changes_speed <- charts(fit_speed,
-                          k = x_seq,
-                          digits=-log10(granularity))
+  # changes_speed <- charts(fit_speed,
+  #                         k = x_seq,
+  #                         digits=-log10(granularity))
+  
+  changes_speed <- charts(fit_speed, k = x_seq)
 
   #fittedvalues <- charts(fit, k=seq(min,max,granularity),digits=-log10(granularity))
 
@@ -121,17 +123,16 @@ get_speed_path <- function(changes_speed,
 
 
   } else {
-      setorder(changes_speed,
+      setorder(path_speed,
+        #changes_speed,
                y)       # reorder rows by descending y
   }
 
   # Step 1: Rename 'change' to 'time'
-  setnames(path_speed,
-           "change",
-           "time")
+  setnames(path_speed, "change", "time")
 
-  # filter out time == 0
-  path_speed <- path_speed[time != 0]
+# filter out zero and negative time increments (wrong-direction changes)
+ path_speed <- path_speed[time > 0]
 
   # Step 2: Compute lagged time and cumulative transformed time
 

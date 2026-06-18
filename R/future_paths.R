@@ -248,7 +248,7 @@ future_path_speed <- function(data_fut,
   path_fut_speed <- data_fut |>
     select(-y) |>
     filter(!is.na(y_fut)) |>
-    cross_join(path_speed) |>
+    dplyr::cross_join(path_speed) |>
     mutate(best = best) |>
     filter(if_else(best == "high",
                    y_fut <= y,
