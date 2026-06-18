@@ -167,8 +167,10 @@ future_path_pctls <- function(data_fut,
                pctl) |>
       arrange(year) |>
       # Calculate new level based on the predicted changes.
-      mutate(y_pctl = if_else(row_number()==n & !is.na(lag(y_fut)),
-                             round((lag(y_fut)+lag(change))/granularity)*granularity, y_fut)) |>
+      mutate(y_pctl = if_else(row_number() == n & !is.na(lag(y_fut)),
+                        round((lag(y_fut) + lag(change)) / granularity) * granularity,
+                        y_fut),
+       y_fut = dplyr::coalesce(y_pctl, y_fut)) |>
       ungroup() |>
       select(-change)
 
